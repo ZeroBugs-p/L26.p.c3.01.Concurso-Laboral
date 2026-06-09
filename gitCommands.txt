@@ -1,0 +1,68 @@
+// GitCommands.txt
+
+<!-- Para Subir las Modificaciones en Git -->
+
+-------------------------------------------------------------------------------------------------------------
+
+        <!-- 🔧 CONFIGURACIÓN INICIAL (solo una vez por proyecto) -->
+    git init                                // Inicializa Git en el proyecto
+    git remote add origin url               // Conecta la PC con GitHub
+
+        <!-- 📥 DESCARGAR PROYECTO (en otra computadora) -->
+    git clone url                           // Descarga el proyecto completo desde GitHub (solo 1 vez)
+    git clone url nombre-carpeta            // Lo mismo pero con otro nombre de carpeta
+
+        <!-- 📄 IGNORAR ARCHIVOS (hacer ANTES del primer commit) -->
+    echo "dist/" > .gitignore               // Crea archivo que ignora la carpeta dist
+    echo "node_modules/" >> .gitignore      // Agrega línea para ignorar node_modules
+
+        <!-- 👀 VER ESTADO (siempre antes de commitear) -->
+    git status                              // Muestra qué archivos cambiaron
+
+        <!-- ➕ AGREGAR ARCHIVOS (preparar para commit) -->
+    git add .                               // Agrega TODOS los archivos modificados
+    git add nombre-del-archivo.algo         // Agrega un solo archivo específico
+    git add carpeta/archivo.algo            // Agrega un archivo dentro de una carpeta
+
+        <!-- 📸 GUARDAR CAMBIOS (commit) -->
+    git commit -m "modificacion"            // Guarda los cambios con una descripción
+
+        <!-- ☁️ SUBIR A GITHUB (push) -->
+    git push                                // Sube los commits de la rama actual
+    git push -u origin master               // Primera vez: sube y conecta rama master
+
+        <!-- 🌿 RAMAS (trabajar en paralelo) -->
+    git branch nombre                       // Crea una nueva rama (pero no te mueves)
+    git checkout nombre                     // Te mueves a esa rama
+    git checkout -b nombre                  // Crea una nueva rama Y te mueves a ella
+    git merge nombre                        // Trae los cambios de 'nombre' a la rama actual
+    git branch -d nombre                    // Borra la rama (después de hacer merge)
+
+        <!-- 🗑️ LIMPIAR SEGUIMIENTO DE GIT -->
+    git rm -r --cached carpeta/             // Borra el seguimiento de Git a esa carpeta (sin borrarla del disco)
+    git add .gitignore                      // Aplica los cambios en .gitignore
+
+        <!-- ⬇️ BAJAR CAMBIOS DE OTROS -->
+    git pull                                // Descarga los cambios que otros subieron a GitHub
+
+----------------------------------------------------------------------------------------------------------------------
+
+    <!-- 🔧 Flujo Diario -->
+
+    # 1. Bajar los cambios que el otro subió ayer
+        git pull
+
+    # 2. Hacer tus modificaciones (editar archivos)
+
+    # 3. Ver qué cambiaste
+        git status
+
+    # 4. Agregar los cambios
+        git add .                    # o git add archivo-especifico.js
+
+    # 5. Guardar localmente (con mensaje claro)
+        git commit -m "descripción de lo que hice"
+
+    # 6. Subir a GitHub para que el otro lo vea
+        git push
+

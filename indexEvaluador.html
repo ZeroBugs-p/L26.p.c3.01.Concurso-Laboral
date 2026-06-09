@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluador de Aspirantes</title>
+</head>
+<body>
+        <!-- EVALUADOR DE ASPIRANTES -->
+
+    <!-- Creamos una Seccion Para Solicitar Los Datos de Cada Aspirante -->
+        <section id="aspirante" hiddenn style="margin-top: 20px; border: 1px solid #ccc; padding: 15px; width: auto;">
+
+        <!-- Titulo de donde se Procesan los Datos -->
+            <h2 style="text-align: center;" id="aspirante_lblAspirante">Procesar Aspirante De Analista En Innovación </h2>
+
+        <!-- Input del Nombre del aspirante -->
+            <div>
+                <label> Nombre del Aspirante:
+                    <input type="text" id="aspirante_inNombre" placeholder="Ej: Mario">
+                </label>
+            </div>
+
+        <!-- Input de la Cedula del Aspirante -->
+            <div>
+                <label> Cedula del Aspirante:
+                    <input type="text" id="aspirante_inCedula" placeholder="Ej: 12345678">
+                </label>
+            </div>
+
+        <!-- Input de las notas del Examen Escrito del Aspirante -->
+            <div>
+                <label> Nota del Examen Escrito:
+                    <input style="width: 180px;" type="number" id="aspirante_inNotaExamenEscrito" placeholder="Ej: 19" min="0" max="20">
+                </label>
+            </div>
+
+        <!-- Input de las notas del Examen Practico del Aspirante -->
+            <div>
+                <label> Nota del Examen Práctico:
+                    <input style="width: 180px;" type="number" id="aspirante_inNotaExamenPractico" placeholder="Ej: 16" min="0" max="20">
+                </label>
+            </div>
+
+        <!-- Input de las notas del Examen Aptitudes del Aspirante -->
+            <div>
+                <label> Nota del Examen Aptitudes:
+                    <input style="width: 180px;" type="number" id="aspirante_inNotaExamenAptitudes" placeholder="Ej: 17" min="0" max="20">
+                </label>
+            </div>
+    
+    <!-- Seciones De Preguntas que Rellena el Evaluador para Calificar al Aspirante -->
+
+        <!-- Separador de Secciones -->
+            <hr style="margin: 20px 0;"> 
+
+            <!-- POSTGRADO 35pts -->
+        <h4 style="text-align: center;" >Evaluacion de Credenciales de Merito a Nivel de Estudio Postgrado 35pts.</h4>
+
+        <!-- Input de la Pregunta 1 -->
+            <div>
+                <label> 1. Posgrado en el área de especialidad objeto de la convocatoría, con trabajo o tesis de grado presentada y aprobada.
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta1" placeholder="Ingrese el puntaje obtenido" min="0" max="25">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 2 -->
+            <div>
+                <label> 2. Otros estudios de postgrado universitario no vinculados con el área objeto de selección, con trabajo o tesis de grado.
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta2" placeholder="Ingrese el puntaje obtenido" min="0" max="20">
+                </label>
+
+        <!-- Input de la Pregunta 3 -->
+            <div>
+                <label> 3. Estudios o cursos de postgrado no conducentes a grado académico. Cursos de ampliación, actualización o perfeccionamiento.
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta3" placeholder="Ingrese el puntaje obtenido" min="0" max="6">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 4 -->
+            <div>
+                <label> 4. Méritos y reconocimientos obtenidos por el trabajo de grado presentados, certificados por el jurado evaluador.
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta4" placeholder="Ingrese el puntaje obtenido" min="0" max="5">
+                </label>
+            </div>
+
+        <!-- Separador de Secciones -->
+            <hr style="margin: 20px 0;"> 
+
+            <!-- PREGRADO 30pts -->
+        <h4 style="text-align: center;" >Evaluación de Credenciales de Mérito a Nivel de Estudios de Pregrado 30pts.</h4>
+
+        <!-- Input de la Pregunta 5 -->
+            <div>
+                <label> 5. Titulo universitario en el área de especialidad objeto de la convocatoria (Según promedio académico).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta5" placeholder="Ingrese el puntaje obtenido" min="0" max="25">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 6 -->
+            <div>
+                <label> 6. Actividad universitaria como preparador/asistente de investigación/extensión en el área objeto (mínimo 6 meses).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta6" placeholder="Ingrese el puntaje obtenido" min="0" max="10">
+                </label>
+
+        <!-- Input de la Pregunta 7 -->
+            <div>
+                <label> 7. Actividad universitaria similar en otras áreas distintas (mínimo 6 meses, máximo 3 actividades).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta7" placeholder="Ingrese el puntaje obtenido" min="0" max="3">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 8 -->
+            <div>
+                <label> 8. Diploma por promedio sobresaliente (19,0 a 20) en el área objeto de la convocatoría.
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta8" placeholder="Ingrese el puntaje obtenido" min="0" max="5">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 9 -->
+            <div>
+                <label> 9. Diploma por promedio sobresaliente en otras áreas (1 punto por diploma, máximo 3).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta9" placeholder="Ingrese el puntaje obtenido" min="0" max="3">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 10 -->
+            <div>
+                <label> 10. Diploma por reconocimientos universitarios en investigación (1 punto por diploma, máximo 3).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta10" placeholder="Ingrese el puntaje obtenido" min="0" max="3">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 11 -->
+            <div>
+                <label> 11. Diploma por reconocimientos universitarios en extensión (1 punto por diploma, máximo 3).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta11" placeholder="Ingrese el puntaje obtenido" min="0" max="3">
+                </label>
+            </div>
+            
+        <!-- Separador de Secciones -->
+            <hr style="margin: 20px 0;">
+
+            <!-- PRODUCCIÓN 15pts -->
+        <h4 style="text-align: center;" >Evaluación de Producción Científica 15pts.</h4>
+
+        <!-- Input de la Pregunta 12 -->
+            <div>
+                <label> 12. Libros o textos relacionados con el área objetó de la convocatoria, con comité editorial (autor único).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta12" placeholder="Ingrese el puntaje obtenido" min="0" max="15">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 13 -->
+            <div>
+                <label> 13. Libros o textos relacionados con el área objetó de la convocatoria, sin comité editorial (autor único).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta13" placeholder="Ingrese el puntaje obtenido" min="0" max="12">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 14 -->
+            <div>
+                <label> 14. Artículos científicos en revistas arbitradas o indexadas relacionadas con el área (autor único).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta14" placeholder="Ingrese el puntaje obtenido" min="0" max="10">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 15 -->
+            <div>
+                <label> 15. Artículos científicos en revistas arbitradas no indexadas relacionadas con el área (autor único).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta15" placeholder="Ingrese el puntaje obtenido" min="0" max="6">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 16  -->
+            <div>
+                <label> 16. Artículos científicos en revistas no arbitradas relacionadas con el área (autor único).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta16" placeholder="Ingrese el puntaje obtenido" min="0" max="4">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 17 -->
+            <div>
+                <label> 17. Otros artículos científicos con respaldo institucional/editorial en áreas no relacionadas (autor único).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta17" placeholder="Ingrese el puntaje obtenido" min="0" max="3">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 18  -->
+            <div>
+                <label> 18. Artículos en memorias de congresos o eventos científicos, conferencias y resúmenes (internacional).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta18" placeholder="Ingrese el puntaje obtenido" min="0" max="10">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 19 -->
+            <div>
+                <label> 19. Ponencias o presentación de trabajos en eventos científicos (internacional, según baremo)
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta19" placeholder="Ingrese el puntaje obtenido" min="0" max="6">
+                </label>
+            </div>
+
+        <!-- Input de la Pregunta 20 -->
+            <div>
+                <label> 20. Patentes Registradas (internacional).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta20" placeholder="Ingrese el puntaje obtenido" min="0" max="15">
+                </label>
+            </div>
+
+        <!-- Separador de Secciones -->
+            <hr style="margin: 20px 0;"> 
+
+            <!-- MERITOS 20pts -->
+        <h4 style="text-align: center;" >Méritos y Experiencia Académica y Profesional 20pts.</h4>
+
+        <!-- Input de la Pregunta 21 -->
+            <div>
+                <label> 21. Actividades comprobables en Docencia, Investigación o Extensión en el área objeto (hasta 6 años).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta21" placeholder="Ingrese el puntaje obtenido" min="0" max="12">
+                </label>                
+            </div>
+
+        <!-- Input de la Pregunta 22 -->
+            <div>
+                <label> 22. Premios o reconocimientos a la docencia, investigación o extensión (hasta 4 premios).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta22" placeholder="Ingrese el puntaje obtenido" min="0" max="8">
+                </label>                
+            </div>
+
+        <!-- Input de la Pregunta 23 -->
+            <div>
+                <label> 23. Experiencia profesional en el área objeto de la convocatoria (hasta 6 años).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta23" placeholder="Ingrese el puntaje obtenido" min="0" max="6">
+                </label>                
+            </div> 
+
+        <!-- Input de la Pregunta 24 -->
+            <div>
+                <label> 24. Experiencia profesional en áreas distintas al área objeto (hasta 3 años).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta24" placeholder="Ingrese el puntaje obtenido" min="0" max="3">
+                </label>                
+            </div>
+
+        <!-- Input de la Pregunta 25 -->
+            <div>
+                <label> 25. Premios o distinciones a la labor profesional (hasta 4 premios).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta25" placeholder="Ingrese el puntaje obtenido" min="0" max="4">
+                </label>                
+            </div>
+
+        <!-- Input de la Pregunta 26 --> 
+            <div>
+                <label> 26. Dirección de institutos/departamentos de investigación o extensión (hasta 3 años).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta26" placeholder="Ingrese el puntaje obtenido" min="0" max="6">
+                </label>                
+            </div>
+
+        <!-- Input de la Pregunta 27 -->
+            <div>
+                <label> 27. Pasantías profesionales certificadas en el área objeto (hasta 4 pasantías).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta27" placeholder="Ingrese el puntaje obtenido" min="0" max="4">
+                </label>                
+            </div>
+
+        <!-- Input de la Pregunta 28 -->
+            <div>
+                <label> 28. Pasantías certificadas en otras áreas (hasta 2 pasantías).
+                    <input style="width: 180px;" type="number" id="aspirante_inPregunta28" placeholder="Ingrese el puntaje obtenido" min="0" max="2">
+                </label>                
+            </div>
+
+        <!-- Separador de Secciones -->
+            <hr style="margin: 20px 0;"> 
+            
+        <!-- Creamos los Botones de Aceptar y Cancelar -->
+            <div style="margin-top: 20px; text-align: center;">
+                
+                <button type="button" id="aspirante_btnCancelar"><Strong> Cancelar </Strong></button>
+                <button type="button" id="aspirante_btnEnviar"><strong> Enviar </strong></button>
+
+            </div>
+
+        </section>
+
+    <!-- Importamos Los Archivos Js -->
+          <script type="module">
+
+            import Cl_cAspirante from "./dist/controllers/Cl_cAspirante.js";
+
+            // Importamos SOLO las vistas planas
+                import Cl_vAspirante from "./dist/views/Cl_vAspirante.js";
+
+            // 1. Instanciamos las vistas
+                const vistaAspirante = new Cl_vAspirante();
+
+            // 2. Inyectamos las vistas en los controladores.
+                new Cl_cAspirante(vistaAspirante);
+
+        </script>
+
+</body>
+</html>

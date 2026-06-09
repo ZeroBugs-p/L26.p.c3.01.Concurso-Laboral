@@ -1,0 +1,104 @@
+// ArrayCommands.txt
+
+================================================
+📌 MÉTODOS IMPORTANTES DE ARRAYS EN JAVASCRIPT
+================================================
+
+1️⃣ push()  → Agrega uno o más elementos al FINAL
+   let frutas = ["🍎", "🍌"];
+   frutas.push("🍒");
+   console.log(frutas); // ["🍎", "🍌", "🍒"]
+
+2️⃣ pop()   → Elimina el ÚLTIMO elemento y lo devuelve
+   let frutas = ["🍎", "🍌", "🍒"];
+   let ultimo = frutas.pop();
+   console.log(ultimo);  // "🍒"
+   console.log(frutas);  // ["🍎", "🍌"]
+
+3️⃣ unshift() → Agrega uno o más elementos al PRINCIPIO
+   let frutas = ["🍎", "🍌"];
+   frutas.unshift("🍒");
+   console.log(frutas); // ["🍒", "🍎", "🍌"]
+
+4️⃣ shift() → Elimina el PRIMER elemento y lo devuelve
+   let frutas = ["🍎", "🍌", "🍒"];
+   let primero = frutas.shift();
+   console.log(primero); // "🍎"
+   console.log(frutas);  // ["🍌", "🍒"]
+
+5️⃣ forEach() → Recorre CADA elemento del array
+   let numeros = [1, 2, 3];
+   numeros.forEach(n => console.log(n * 2));
+   // Salida: 2, 4, 6
+
+6️⃣ map() → Crea un NUEVO array transformando cada elemento
+   let numeros = [1, 2, 3];
+   let duplicados = numeros.map(n => n * 2);
+   console.log(duplicados); // [2, 4, 6]
+
+7️⃣ filter() → Filtra elementos que cumplen una condición
+   let edades = [15, 18, 22, 16];
+   let mayores = edades.filter(e => e >= 18);
+   console.log(mayores); // [18, 22]
+
+8️⃣ sort() → Ordena el array
+   let numeros = [3, 1, 4, 2];
+   numeros.sort((a, b) => a - b); // ascendente
+   console.log(numeros); // [1, 2, 3, 4]
+
+   let letras = ["c", "a", "b"];
+   letras.sort();
+   console.log(letras); // ["a", "b", "c"]
+
+9️⃣ splice() → Elimina o reemplaza elementos en cualquier posición
+   let numeros = [1, 2, 3, 4];
+   numeros.splice(1, 2); // desde índice 1, elimina 2 elementos
+   console.log(numeros); // [1, 4]
+
+🔟 length → Propiedad que devuelve el número de elementos (NO es función, pero esencial)
+   let frutas = ["🍎", "🍌", "🍒"];
+   console.log(frutas.length); // 3
+
+================================================
+✨ BONUS (también muy útiles)
+================================================
+
+✅ indexOf() → Busca la posición de un elemento
+   let frutas = ["🍎", "🍌", "🍒"];
+   console.log(frutas.indexOf("🍌")); // 1
+
+✅ find() → Devuelve el PRIMER elemento que cumple una condición
+   let edades = [15, 18, 22];
+   let primero = edades.find(e => e >= 18);
+   console.log(primero); // 18
+
+✅ some() → ¿Algún elemento cumple la condición? (true/false)
+   let numeros = [1, 2, 3];
+   let hayPares = numeros.some(n => n % 2 === 0);
+   console.log(hayPares); // true
+
+✅ every() → ¿TODOS los elementos cumplen la condición? (true/false)
+   let numeros = [2, 4, 6];
+   let todosPares = numeros.every(n => n % 2 === 0);
+   console.log(todosPares); // true
+
+================================================
+🎯 EJEMPLO RÁPIDO CON VARIOS MÉTODOS JUNTOS
+================================================
+let estudiantes = [
+  { nombre: "Ana", edad: 20 },
+  { nombre: "Luis", edad: 16 },
+  { nombre: "Carlos", edad: 22 }
+];
+
+// Filtrar mayores de edad
+let adultos = estudiantes.filter(e => e.edad >= 18);
+console.log(adultos); // Ana y Carlos
+
+// Sacar solo los nombres
+let nombres = adultos.map(e => e.nombre);
+console.log(nombres); // ["Ana", "Carlos"]
+
+================================================
+🔥 ¡CON ESTO TIENES LO ESENCIAL! 🔥
+================================================

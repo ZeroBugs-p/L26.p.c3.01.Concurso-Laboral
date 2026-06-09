@@ -1,0 +1,457 @@
+08-06-2026 REPORTEINFORMATIVO
+
+Este reporte explica para qué funciona cada archivo del proyecto "L26.p.c3.01.Concurso-Laboral" y describe qué hace cada sección importante dentro de los archivos de texto y código.
+
+=== RESUMEN GENERAL DEL PROYECTO ===
+
+El proyecto es una aplicación web tipo MVC con dos roles principales:
+- Evaluador: ingresa información de aspirantes y califica sus puntajes.
+- Administrador: visualiza las entregas registradas en una tabla.
+
+El sistema usa:
+- HTML para la interfaz.
+- Vistas (`views`) para leer/escribir el DOM y exponer eventos.
+- Controladores (`controllers`) para coordinar vistas, modelos y servicios.
+- Modelos (`models`) para la lógica de negocio y cálculos.
+- Servicios (`services`) para comunicarse con MockAPI.
+
+También incluye documentación y comandos de apoyo en archivos de texto.
+
+---
+
+1) tsconfig.json
+
+Este archivo configura el compilador TypeScript:
+- `target: ES2022`: compila a código JavaScript moderno ES2022.
+- `module: ES2022`: usa módulos ES nativos.
+- `rootDir: ./src`: la raíz del código fuente está en `src`.
+- `outDir: ./dist`: los archivos compilados se escriben en `dist`.
+- `noEmitOnError: true`: no genera `dist` si hay errores de compilación.
+- `esModuleInterop: true`: habilita interoperabilidad entre `import` y CommonJS.
+- `forceConsistentCasingInFileNames: true`: exige mayúsculas consistentes en rutas.
+- `strict: true`: habilita chequeo estricto de tipos.
+- `skipLibCheck: true`: omite verificación de tipos en librerías externas.
+
+---
+
+2) indexAdministrador.html
+
+Archivo HTML que muestra la interfaz para el administrador que revisa entregas.
+
+Estructura:
+- `<!DOCTYPE html>`: define documento HTML5.
+- `<html lang="en">`: empieza la página con idioma inglés.
+- `<head>`: metadatos y título.
+- `<body>`: contenido visible.
+- `<section id="concurso">`: contenedor principal con título y botón.
+- `<button id="concurso_btVerEntregas">`: botón para ver entregas.
+- `<section id="entregas" hidden>`: sección oculta inicial que muestra la tabla de entregas.
+- `<table>`: tabla con columnas para aspirante, cédula y puntajes de cada formato.
+- `<tbody id="entregas_tblRegistros"></tbody>`: lugar donde se cargarán las filas dinámicas.
+- Botones `Volver` y `Recargar` para manejar la vista de entregas.
+- `<script type="module">`: carga módulos JS compilados desde `dist`.
+- Importa `Cl_cConcurso` y `Cl_vConcurso`.
+- Instancia `Cl_vConcurso` y genera `Cl_cConcurso({ vista: vConcurso })`.
+
+Comentarios HTML explican secciones, pero no afectan la ejecución.
+
+---
+
+3) indexEvaluador.html
+
+Archivo HTML para la vista del evaluador que ingresa datos y puntajes.
+
+Estructura:
+- Metadatos estándar y título.
+- `<section id="aspirante" hiddenn>`: sección del formulario. Nota: tiene un typo `hiddenn` en lugar de `hidden`.
+- Inputs para:
+  - Nombre del aspirante.
+  - Cédula del aspirante.
+  - Nota de examen escrito.
+  - Nota de examen práctico.
+  - Nota de examen de aptitudes.
+- A continuación hay campos para 28 preguntas divididos en 4 bloques:
+  - Preguntas 1-4: postgrado / méritos de tesis (CO5, 35 pts).
+  - Preguntas 5-11: pregrado / diplomas / reconocimientos (CO5.1, 30 pts).
+  - Preguntas 12-20: producción científica (CO5.2, 15 pts).
+  - Preguntas 21-28: méritos y experiencia profesional (CO5.3, 20 pts).
+- Botones `Cancelar` y `Enviar` con ids `aspirante_btnCancelar` y `aspirante_btnEnviar`.
+- `<script type="module">` importa `Cl_cAspirante` y `Cl_vAspirante` desde `dist`.
+- Crea la vista `Cl_vAspirante()` y el controlador `new Cl_cAspirante(vistaAspirante)`.
+
+---
+
+4) src/interfaces/I_vAspirante.ts
+
+Define la interfaz de la vista del evaluador.
+- Expone getters para nombre, cédula y las 3 notas.
+- Exige los métodos `mostrar()` y `ocultar()`.
+- Exige métodos para obtener puntajes de cada bloque de preguntas: `puntajeCO5()`, `puntajeCO51()`, `puntajeCO52()`, `puntajeCO53()`.
+- Exige `mostrarConfirmacion()` para mostrar mensaje final.
+- Exige eventos `onEnviar()` y `onCancelar()`.
+
+---
+
+5) src/interfaces/I_vConcurso.ts
+
+Define la interfaz de la vista del administrador.
+- Expone `onVerEntregas(callback)`.
+- Expone `deshabilitarBotones()` y `habilitarBotones()`.
+
+---
+
+6) src/interfaces/I_vEntregas.ts
+
+Define la interfaz de la vista de entregas.
+- `mostrarAspirantes(aspirante: Cl_mAspirante[])` para renderizar la tabla.
+- `onRecargar(callback)` y `onVolver(callback)`.
+- `mostrar()` y `ocultar()` para controlar visibilidad.
+
+---
+
+7) src/views/Cl_vAspirante.ts
+
+Implementa la vista del formulario evaluador.
+
+Importa `I_vAspirante`.
+
+En el constructor:
+- captura referencias a los inputs del DOM por id.
+- captura botones `Enviar` y `Cancelar`.
+- captura el contenedor `aspirante`.
+- llama `aplicarValidaciones()` para forzar min/max en inputs.
+
+Getters:
+- `nombre`, `cedula`, `notaExamenEscrito`, `notaExamenPractico`, `notaExamenAptitudes`.
+
+Métodos de puntaje:
+- `puntajeCO5()`: lee inputs 1 a 4; no acepta valores negativos; retorna valores positivos.
+- `puntajeCO51()`: lee inputs 5 a 11.
+- `puntajeCO52()`: lee inputs 12 a 20.
+- `puntajeCO53()`: lee inputs 21 a 28.
+
+Eventos:
+- `onEnviar(callback)`: asigna callback a `btnEnviar.onclick`.
+- `onCancelar(callback)`: asigna callback a `btnCancelar.onclick`.
+
+Visibilidad:
+- `mostrar()`: muestra la vista y limpia valores.
+- `ocultar()`: oculta la vista.
+
+Confirmación:
+- `mostrarConfirmacion()`: reemplaza el contenido de la sección con un mensaje de éxito y botón para volver a `indexEvaluador.html`.
+
+Validaciones:
+- `aplicarValidaciones()`: agrega evento `input` a los 28 campos de preguntas.
+- Comprueba que el valor sea numérico y respete `min` y `max`.
+- Si el valor excede el máximo, lo corrige y alerta.
+- Si el valor es menor que el mínimo, lo corrige y alerta.
+
+---
+
+8) src/views/Cl_vConcurso.ts
+
+Implementa la vista del administrador.
+- Captura el botón `concurso_btVerEntregas`.
+- `onVerEntregas(callback)`: asigna callback.
+- `deshabilitarBotones()`: deshabilita el botón de ver entregas.
+- `habilitarBotones()`: habilita el botón.
+
+---
+
+9) src/views/Cl_vEntregas.ts
+
+Implementa la vista de la tabla de entregas.
+- Captura contenedor `entregas`, tabla, botones `recargar` y `volver`.
+- `onRecargar(callback)` y `onVolver(callback)`.
+- `mostrarAspirantes(aspirantes)`: limpia la tabla y agrega filas con datos de cada `Cl_mAspirante`.
+- `mostrar()`: quita el atributo `hidden`.
+- `ocultar()`: pone `hidden=true`.
+
+Nota: no hay validación de espacios vacíos dentro de la tabla, sólo renderiza los valores del modelo.
+
+---
+
+10) src/controllers/Cl_cAspirante.ts
+
+Controlador del evaluador.
+- Importa `I_vAspirante`, `Cl_mAspirante` y `sAspirante`.
+- Guarda `vista` en una propiedad privada.
+- En el constructor, liga `vista.onEnviar()` al método `btEnviarOnClick()`.
+
+`btEnviarOnClick()`:
+- Crea `aspirante` nuevo con los datos básicos del formulario.
+- Llama a `vista.puntajeCO5()`, `puntajeCO51()`, `puntajeCO52()` y `puntajeCO53()`.
+- Para cada puntaje devuelto, invoca `aspirante.agregarPuntos(...)` con la sección correspondiente.
+- Llama a `sAspirante.agregar(aspirante)` y espera el resultado.
+- Muestra un `alert` con `resultado.mensaje`.
+- Si `resultado.ok` es verdadero, llama a `vista.mostrarConfirmacion()`.
+
+Este controlador es un coordinador: no realiza cálculos de negocio, sólo usa la vista y el modelo.
+
+---
+
+11) src/controllers/Cl_cConcurso.ts
+
+Controlador del administrador.
+- Importa `I_vConcurso`, `Cl_mConcurso`, `Cl_vEntregas` y `Cl_cEntregas`.
+- Guarda la vista `vista`.
+- En el constructor, liga `vista.onVerEntregas()` a `onVerEntregas()`.
+
+`onVerEntregas()`:
+- Deshabilita los botones de la vista actual.
+- Crea una nueva vista `Cl_vEntregas`.
+- Crea un modelo `Cl_mConcurso`.
+- Instancia `Cl_cEntregas` con `modelo`, `vista` y un callback `volverCallback` que habilita botones.
+
+El comentario al final describe la lógica general del proyecto en términos de formularios y entregas.
+
+---
+
+12) src/controllers/Cl_cEntregas.ts
+
+Controlador de la vista de entregas.
+- Importa `I_vEntregas`, `Cl_sEntregas` y `Cl_mConcurso`.
+- Guarda `modelo`, `vista` y `volverCallback`.
+- En constructor:
+  - asigna `onRecargar` y `onVolver` de la vista.
+  - llama `vista.mostrar()`.
+  - llama `btRecargarOnClick()` para cargar datos al iniciar.
+
+`onVolver()`:
+- oculta la vista de entregas y ejecuta el callback de volver.
+
+`btRecargarOnClick()`:
+- llama `Cl_sEntregas.getEntregas()`.
+- si `resultado.ok` es falso, alerta error.
+- llama `modelo.setAspirantes(resultado.tabla)`.
+- llama `vista.mostrarAspirantes(modelo.getAspirantes())`.
+
+---
+
+13) src/models/Cl_mAspirante.ts
+
+Modelo del aspirante con lógica de negocio.
+
+Atributos:
+- `tabla`: cadena fija "aspirante".
+- `_nombre`, `_cedula`, `_notaExamenEscrito`, `_notaExamenPractico`, `_notaExamenAptitudes`.
+- Arrays `ptsFormatoCO5`, `ptsFormatoCO51`, `ptsFormatoCO52`, `ptsFormatoCO53`.
+- Arrays `juradoACO10`, `juradoBCO10`, `juradoCCO10` para futura tabla CO10.
+
+Constructor:
+- recibe un objeto con nombre, cédula y 3 notas.
+- inicializa los setters correspondientes.
+
+Getters y setters:
+- validan el tipo de nota con `+n` para convertir a número.
+
+`agregarPuntos(seccion, puntos)`:
+- según la sección, agrega puntos al array correspondiente.
+- si la sección no coincide, muestra error en consola.
+
+Métodos de suma:
+- `sumaPtsFormatoCO5()`: suma elementos de `ptsFormatoCO5`, corta a 35 si excede.
+- `sumaPtsFormatoCO51()`: suma elementos de `ptsFormatoCO51`, corta a 30.
+- `sumaPtsFormatoCO52()`: suma y limita con `Math.min(suma, 15)`.
+- `sumaPtsFormatoCO53()`: suma y limita con `Math.min(suma, 20)`.
+
+`totalObtenido()`:
+- suma los resultados de los cuatro bloques.
+
+`calificacionFinal()`:
+- divide `totalObtenido()` entre 5 para obtener nota sobre 20.
+
+`cargarSumasGuardadas(sumas)`:
+- si los arrays de puntos están vacíos, los rellena con las sumas leídas de MockAPI.
+- usa `Number(...) || 0` para asegurar valor numérico.
+
+Sección CO7/CO8/CO9/CO10:
+- `calificacion10Porciento()`: totalObtenido * 10%.
+- `calificacionCO8()`: promedio de examen escrito y práctico.
+- `calificacion60PorcientoCO8()`: promedio CO8 * 60%.
+- `calificacion30PorcientoAptitudes()`: nota de aptitudes * 30%.
+- `agregarPtsJurado(jurado, puntosJurado)`: almacena puntajes de jurados en arrays; aún no usado.
+- `notaDefinitiva()`: suma CO7 + CO8 + CO9.
+
+`toJSON()`:
+- prepara un objeto plano para guardar en MockAPI.
+- agrega `tabla`, `nombre`, `cedula`, suma de formatos y calificaciones.
+
+---
+
+14) src/models/Cl_mConcurso.ts
+
+Modelo que contiene lista de aspirantes.
+- `aspirantes: Cl_mAspirante[] = []`.
+- `agregarAspirante(aspirante)`: añade un aspirante manualmente.
+
+`setAspirantes(aspirante: any[])`:
+- borra la lista actual y recorre cada item recibido de MockAPI.
+- por cada item:
+  - crea nuevo `Cl_mAspirante` con nombre, cédula y notas.
+  - registra logs de consola con los datos crudos recibidos.
+  - llama `cargarSumasGuardadas(...)` para preservar los totales recibidos desde MockAPI.
+  - agrega el aspirante al array.
+
+`getAspirantes()` devuelve la lista.
+
+---
+
+15) src/services/Cl_sAspirante.ts
+
+Servicio especializado para aspirantes.
+- Extiende `Cl_sProyecto`.
+
+`existe(aspiranteId)`:
+- llama a `super.existeId()` con tabla "aspirante" y campo `cedula`.
+- convierte `aspiranteId` a número.
+
+`agregar(nuevoAspirante)`:
+- valida que cédula exista y sea numérica.
+- valida que nombre exista.
+- comprueba si la cédula ya existe mediante `super.existeId(...)`.
+- si hay error de servidor devuelve mensaje apropiado.
+- si la cédula ya existe, devuelve mensaje de duplicado.
+- finalmente llama `super.agregar(nuevoAspirante.toJSON())`.
+
+---
+
+16) src/services/Cl_sEntregas.ts
+
+Servicio para obtener entregas.
+- Extiende `Cl_sProyecto`.
+- `getEntregas()` llama `super.getTabla({ tabla: "aspirante" })`.
+- Devuelve un objeto con `ok` y `tabla`.
+
+---
+
+17) src/services/Cl_sMockApi.ts
+
+Capa base para comunicación con MockAPI.
+
+Atributos:
+- `apiUrl`: URL de la API. Si está vacía, retorna error.
+
+`fetchMockApi({...})`:
+- configura `RequestInit` con `method`, `headers` y `body` si existe.
+- realiza `fetch(uri, options)`.
+- maneja `404` devolviendo `ok: true` y `data: []`.
+- si la respuesta no es ok, devuelve `ok: false`.
+- intenta parsear JSON; si falla, devuelve `data: null`.
+- en errores de red devuelve `ok: false` y `message`.
+
+`getTabla({ tabla })`:
+- arma `uri = this.apiUrl`.
+- pide GET a la API.
+- si responde 404 devuelve tabla vacía.
+- si no es ok devuelve error.
+- retorna `data` o array vacío.
+
+`existeId({ tabla, tablaId, tablaIdName })`:
+- construye una URL con query `?tabla=...&campo=...`.
+- si la respuesta es 404, asume que no existe el registro.
+- si hay error real, devuelve ok false.
+- si hay datos y la respuesta es 200, devuelve `true` si hay al menos un registro.
+
+`agregar(registro)`:
+- POST a la API con el cuerpo JSON.
+- si hay error devuelve mensaje.
+- si guarda correctamente devuelve mensaje con ID.
+
+`obtenerIdMockApi(...)`:
+- busca el recurso en MockAPI con `tablaIdName` y valor.
+- si hay resultados, devuelve el `id` interno de MockAPI.
+- útil para PUT y DELETE.
+
+`modificar(tablaId, registro, tablaIdName)`:
+- obtiene `recursoId` con `obtenerIdMockApi`.
+- si no lo encuentra, devuelve error.
+- hace PUT a `apiUrl/recursoId`.
+- devuelve mensaje.
+
+`eliminar(tablaId, tabla, tablaIdName)`:
+- obtiene `recursoId`.
+- hace DELETE a `apiUrl/recursoId`.
+- devuelve mensaje.
+
+---
+
+18) src/services/Cl_sProyecto.ts
+
+Define la URL concreta de la API del proyecto.
+- Extiende `Cl_sMockApi`.
+- `apiUrl` fija en `https://6a273025a84f9d39e908509d.mockapi.io/concurso/Aspirantes`.
+
+Esto significa que todos los servicios usan la misma API base.
+
+---
+
+19) resources/flujo-codigo.md
+
+Documento de apoyo que explica la arquitectura MVC del proyecto.
+- Define las capas: HTML, vistas, controladores, modelos y servicios.
+- Explica el flujo del evaluador y el administrador.
+- Este archivo es documentación interna y no se ejecuta.
+
+---
+
+20) resources/logica-modelos.md
+
+Documento de apoyo que describe la lógica de puntuación y tablas CO7, CO8, CO9.
+- Explica que la nota definitiva combina:
+  - 10% de credenciales de mérito.
+  - 60% de exámenes escrito y práctico.
+  - 30% de aptitudes.
+- Describe cómo `Cl_mAspirante` calcula cada parte.
+- Es una explicación textual, no código ejecutable.
+
+---
+
+21) ArrayCommands.txt
+
+Archivo de referencia con ejemplos básicos de métodos de arrays en JavaScript:
+- push, pop, unshift, shift, forEach, map, filter, sort, splice, length.
+- Incluye ejemplos de uso y consejos.
+- No forma parte del flujo principal de la aplicación.
+
+---
+
+22) gitCommands.txt
+
+Archivo de consulta con comandos Git.
+- Añadir repositorio, clonar, .gitignore, status, add, commit, push, ramas, merge, pull.
+- Es un documento de ayuda para el flujo de trabajo con Git.
+
+---
+
+23) dist/
+
+Carpeta generada con los archivos compilados desde TypeScript.
+- Incluye los mismos módulos de `src` en versión JavaScript.
+- No se necesitan leer manualmente para entender el proyecto, porque son artefactos de construcción.
+- Contiene `controllers`, `views`, `models`, `services`, `interfaces` compilados.
+
+---
+
+24) Imágenes en `resources/`:
+- `resources/1.png`
+- `resources/2.png`
+- `resources/3.png`
+
+Estas son imágenes de apoyo. No pueden leerse como texto en este reporte.
+
+---
+
+25) Notas importantes sobre el proyecto
+
+- La interfaz `indexEvaluador.html` tiene un error tipográfico en `hiddenn` que podría impedir ocultar la sección correctamente.
+- El flujo principal de registro guarda únicamente las sumas por bloque, no cada pregunta individual.
+- La lógica de cálculo del modelo está centralizada en `Cl_mAspirante`.
+- Manualmente se construyen los arrays de puntajes desde la vista y luego se agregan al modelo.
+- El controlador `Cl_cEntregas` recarga datos desde MockAPI y los transforma en objetos modelo para renderizar la tabla.
+
+---
+
+Con esto queda documentado el propósito y funcionamiento de cada archivo de texto y código relevante en el proyecto.
+

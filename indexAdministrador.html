@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador de Aspirantes</title>
+</head>
+<body>
+
+    <!-- ADMINISTRADOR DE ASPIRANTES -->
+
+    <!-- Creamos una Sección donde Escogemos las tablas Solicitadas -->
+        <section id="concurso" style="margin-top: 20px; border: 1px solid #ccc; padding: 15px; width: 300px;">
+
+    <!-- Título de donde se escoge que tabla ver -->
+        <h2>Administrar Concurso de Aspirantes</h2>
+
+    <!-- Botones Para actualizar las entragas -->
+        <button id="concurso_btVerEntregas"><strong> Ver Entregras </strong></button>
+
+    <!-- Cierre de la Sección -->
+        </section>
+
+    <!-- Creamos una Sección donde vamos a ver las tablas Solicitadas  -->
+        <section id="entregas" hidden style="margin-top: 10px; border: 1px solid #ccc; padding: 15px; width: auto;">
+            
+        <!-- Título donde vemos la tabla de Puntuación de cada Aspirante -->
+            <h2 style="text-align: center;">Entregas del Evaluador</h2>
+
+        <!-- Div donde Colocaremos la tabla -->
+            <div>
+
+                <table style="text-align: center; width: 100%;" border="1">
+                    <thead> <!-- thead: Encabezado de tabla -->
+                        <tr> <!-- tr: Fila de la tabla y th: Columna de la tabla -->
+                            <th style="padding: 15px;">Aspirantes</th> 
+                            <th style="padding: 15px;">Cedulas</th>
+                            <th style="padding: 15px;">Postragrado(CO5) 35pts</th>
+                            <th style="padding: 15px;">Pregrado(CO5.1) 30pts</th>
+                            <th style="padding: 15px;">Producción(CO5.2) 15pts</th>
+                            <th style="padding: 15px;">Meritos(CO5.3) 20pts</th>
+                            <th style="padding: 15px;">Total Obtenido sobre 100pts</th>
+                            <th style="padding: 15px;">Calificación Final sobre 20pts</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="entregas_tblRegistros"></tbody> <!-- tbody: Cuerpo de tabla -->
+                </table>
+
+            </div>
+
+        <!-- br: Es un espacio de por medio entre apartados -->
+            <br>
+
+        <!-- Boton para Recargar la pagina y ver si hay mas aspirantes -->
+            <div style="text-align: center;">
+                <button id="entregas_btVolver" style="margin-top: 10px;"><strong> Volver </strong></button>
+                <button id="entregas_btRecargar"><strong> Recargar </strong></button>
+            </div>
+        
+    <!-- Cierre de Sección -->
+        </section>
+
+    <!-- Importamos Los Archivos Js -->
+        <script type="module">
+
+            import Cl_cConcurso from "./dist/controllers/Cl_cConcurso.js";
+            import Cl_vConcurso from "./dist/views/Cl_vConcurso.js";
+
+            const vConcurso = new Cl_vConcurso();
+
+            new Cl_cConcurso({ vista: vConcurso });
+
+        </script>
+        
+</body>
+</html>
