@@ -3,11 +3,15 @@ export default class Cl_vEntregas {
     btRecargar;
     btVolver;
     tblRegistros;
+    lblPorcentaje;
+    lblMas25CO5;
     constructor() {
         this.ui = document.getElementById("entregas");
         this.tblRegistros = document.getElementById("entregas_tblRegistros");
         this.btRecargar = document.getElementById("entregas_btRecargar");
         this.btVolver = document.getElementById("entregas_btVolver");
+        this.lblPorcentaje = document.getElementById("entregas_lblPorcentaje");
+        this.lblMas25CO5 = document.getElementById("entregas_lblMas25CO5");
     }
     onRecargar(callback) {
         this.btRecargar.onclick = callback;
@@ -29,6 +33,12 @@ export default class Cl_vEntregas {
                     <td>${aspirante.calificacionFinal()}</td>
             </tr>`;
         });
+    }
+    mostrarPorcentaje(porcentaje) {
+        this.lblPorcentaje.textContent = `Porcentaje de calificación: ${porcentaje.toFixed(2)} %`;
+    }
+    mostrarMas25CO5(nombres) {
+        this.lblMas25CO5.textContent = `Aspirantes con más de 25 puntos en CO5: ${nombres}, `;
     }
     mostrar() {
         this.ui.removeAttribute("hidden");

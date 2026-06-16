@@ -25,5 +25,7 @@ export default class Cl_cEntregas {
         }
         this.modelo.setAspirantes(resultado.tabla);
         this.vista.mostrarAspirantes(this.modelo.getAspirantes());
+        this.vista.mostrarPorcentaje(this.modelo.porcentajeCalificacion());
+        this.vista.mostrarMas25CO5(this.modelo.mas25CO5());
     }
 }

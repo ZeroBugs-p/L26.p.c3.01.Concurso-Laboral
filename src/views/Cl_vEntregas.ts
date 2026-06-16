@@ -6,12 +6,16 @@ export default class Cl_vEntregas implements I_vEntregas {
     private btRecargar: HTMLButtonElement;
     private btVolver: HTMLButtonElement;
     private tblRegistros: HTMLTableElement;
+    private lblPorcentaje: HTMLElement;
+    private lblMas25CO5: HTMLElement;
 
     constructor() {
         this.ui = document.getElementById("entregas") as HTMLDivElement;
         this.tblRegistros = document.getElementById("entregas_tblRegistros") as HTMLTableElement;
         this.btRecargar = document.getElementById("entregas_btRecargar") as HTMLButtonElement;
         this.btVolver = document.getElementById("entregas_btVolver") as HTMLButtonElement;
+        this.lblPorcentaje = document.getElementById("entregas_lblPorcentaje") as HTMLElement;
+        this.lblMas25CO5 = document.getElementById("entregas_lblMas25CO5") as HTMLElement;
     }
   
     onRecargar(callback: () => void): void {
@@ -36,8 +40,16 @@ export default class Cl_vEntregas implements I_vEntregas {
         });
     }
 
-  mostrar() {
-    this.ui.removeAttribute("hidden");      }
+    mostrarPorcentaje(porcentaje: number): void {
+        this.lblPorcentaje.textContent = `Porcentaje de calificación: ${porcentaje.toFixed(2)} %`;
+    }
+
+    mostrarMas25CO5(nombres: string[]): void {
+        this.lblMas25CO5.textContent = `Aspirantes con más de 25 puntos en CO5: ${nombres}, `;
+    }
+
+    mostrar() {
+        this.ui.removeAttribute("hidden");      }
 
   ocultar() {
     this.ui.setAttribute("hidden", "true");     }

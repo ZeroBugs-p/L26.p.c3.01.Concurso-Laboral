@@ -4,9 +4,34 @@ import Cl_mAspirante from "./Cl_mAspirante.js";
 
 export default class Cl_mConcurso {
     public aspirantes: Cl_mAspirante[] = [];
+    private mayor: number = 0;
+    private auxNombreMas25CO5: string = "";
 
     public agregarAspirante(aspirante: Cl_mAspirante): void {
         this.aspirantes.push(aspirante);
+    }
+
+    porcentajeCalificacion(): number {
+        const cantidadAspirantes = this.aspirantes.length;
+        if (cantidadAspirantes === 0) {
+            return 0;
+        }
+
+        const sumaTotal = this.aspirantes.reduce((suma, aspirante) => suma + aspirante.totalObtenido(), 0);
+        const totalPosible = cantidadAspirantes * 100;
+
+        return Number(((sumaTotal / totalPosible) * 100).toFixed(2));
+    }
+
+    mas25CO5(): string[] {
+        const nombreMas25CO5: string[] = [];
+        for(let i = 0; i < this.aspirantes.length; i++) {
+            if(this.aspirantes[i].sumaPtsFormatoCO5() >= 25) {
+                nombreMas25CO5.push(this.aspirantes[i].nombre);
+                console.log("=== mas25CO5: Aspirante con más de 25 puntos en CO5 ===", this.aspirantes[i].nombre);
+            }
+        }
+        return nombreMas25CO5;
     }
     
     setAspirantes(aspirante: any[]) {
