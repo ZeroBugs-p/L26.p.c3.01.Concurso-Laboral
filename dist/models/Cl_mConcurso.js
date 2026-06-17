@@ -4,6 +4,7 @@ export default class Cl_mConcurso {
     aspirantes = [];
     mayor = 0;
     auxNombreMas25CO5 = "";
+    static APROBADO_MINIMO = 10;
     agregarAspirante(aspirante) {
         this.aspirantes.push(aspirante);
     }
@@ -25,6 +26,29 @@ export default class Cl_mConcurso {
             }
         }
         return nombreMas25CO5;
+    }
+    obtenerAspirantePorCedula(cedula) {
+        return this.aspirantes.find((aspirante) => aspirante.cedula === cedula) || null;
+    }
+    porcentajeAprobados() {
+        const total = this.aspirantes.length;
+        if (total === 0) {
+            return 0;
+        }
+        const aprobados = this.aspirantes.filter((aspirante) => aspirante.calificacionFinal() >= Cl_mConcurso.APROBADO_MINIMO).length;
+        return Number(((aprobados / total) * 100).toFixed(2));
+    }
+    calificacionMaxima() {
+        if (this.aspirantes.length === 0) {
+            return 0;
+        }
+        return Math.max(...this.aspirantes.map((aspirante) => aspirante.calificacionFinal()));
+    }
+    calificacionMinima() {
+        if (this.aspirantes.length === 0) {
+            return 0;
+        }
+        return Math.min(...this.aspirantes.map((aspirante) => aspirante.calificacionFinal()));
     }
     setAspirantes(aspirante) {
         this.aspirantes = [];

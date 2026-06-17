@@ -6,6 +6,7 @@ export default class Cl_mConcurso {
     public aspirantes: Cl_mAspirante[] = [];
     private mayor: number = 0;
     private auxNombreMas25CO5: string = "";
+    private static APROBADO_MINIMO = 10;
 
     public agregarAspirante(aspirante: Cl_mAspirante): void {
         this.aspirantes.push(aspirante);
@@ -32,6 +33,39 @@ export default class Cl_mConcurso {
             }
         }
         return nombreMas25CO5;
+    }
+
+    obtenerAspirantePorCedula(cedula: string): Cl_mAspirante | null {
+        return this.aspirantes.find((aspirante) => aspirante.cedula === cedula) || null;
+    }
+
+    porcentajeAprobados(): number {
+        const total = this.aspirantes.length;
+        if (total === 0) {
+            return 0;
+        }
+
+        const aprobados = this.aspirantes.filter(
+            (aspirante) => aspirante.calificacionFinal() >= Cl_mConcurso.APROBADO_MINIMO,
+        ).length;
+
+        return Number(((aprobados / total) * 100).toFixed(2));
+    }
+
+    calificacionMaxima(): number {
+        if (this.aspirantes.length === 0) {
+            return 0;
+        }
+
+        return Math.max(...this.aspirantes.map((aspirante) => aspirante.calificacionFinal()));
+    }
+
+    calificacionMinima(): number {
+        if (this.aspirantes.length === 0) {
+            return 0;
+        }
+
+        return Math.min(...this.aspirantes.map((aspirante) => aspirante.calificacionFinal()));
     }
     
     setAspirantes(aspirante: any[]) {

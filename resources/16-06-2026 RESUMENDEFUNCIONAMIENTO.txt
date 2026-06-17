@@ -33,7 +33,10 @@ Capas principales:
 - `src/services/Cl_sProyecto.ts`: define la URL del proyecto MockAPI.
 - `src/services/Cl_sAspirante.ts`: servicio para validar y agregar aspirantes.
 - `src/services/Cl_sEntregas.ts`: servicio para obtener entregas.
+- `src/models/Cl_mConcurso.ts`: ahora también contiene métodos para buscar aspirantes por cédula, calcular el porcentaje de aprobados y obtener las calificaciones máxima y mínima.
 - `indexAdministrador.html`: ahora también incluye un botón `Reporte` dentro de la sección de entregas y una sección `reporte` oculta con métricas de resumen.
+- La sección de reporte permite buscar por cédula para obtener el formulario del participante.
+- El reporte muestra el porcentaje de aspirantes aprobados, la calificación más alta y la calificación más baja del proceso.
 
 4) FUNCIONAMIENTO ESENCIAL
 

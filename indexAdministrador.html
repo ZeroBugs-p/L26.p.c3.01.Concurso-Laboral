@@ -68,8 +68,25 @@
     <!-- Sección de Reporte sin tabla -->
         <section id="reporte" hidden style="margin-top: 10px; border: 1px solid #ccc; padding: 15px; width: auto;">
             <h2 style="text-align: center;">Reporte de Entregas</h2>
+            <div style="text-align: left; margin: 10px 0;">
+                <label for="reporte_inpCedula">Buscar por cédula:</label>
+                <input id="reporte_inpCedula" type="text" style="margin-left: 5px; width: 140px;" />
+                <button id="reporte_btBuscar"><strong> Buscar </strong></button>
+            </div>
+            <div id="reporte_divFormulario" style="white-space: pre-wrap; background-color: #0d95f5; color: white; margin: 10px; padding: 10px; border-radius: 5px; min-height: 80px;">
+                Ingrese una cédula y presione Buscar para ver el formulario del participante.
+            </div>
             <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
                 <p id="reporte_lblPorcentaje">Porcentaje de calificación: 0 %</p>
+            </div>
+            <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
+                <p id="reporte_lblAprobados">Aprobados: 0 %</p>
+            </div>
+            <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
+                <p id="reporte_lblCalificacionMaxima">Calificación más alta: 0</p>
+            </div>
+            <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
+                <p id="reporte_lblCalificacionMinima">Calificación más baja: 0</p>
             </div>
             <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
                 <p id="reporte_lblMas25CO5">Aspirantes con más de 25 puntos en CO5: 0</p>
@@ -93,8 +110,60 @@
             const btReporte = document.getElementById("concurso_btReporte");
             const reporteSection = document.getElementById("reporte");
             const reporteCerrar = document.getElementById("reporte_btCerrar");
+            const reporteInputCedula = document.getElementById("reporte_inpCedula");
+            const reporteBuscar = document.getElementById("reporte_btBuscar");
+            const reporteDivFormulario = document.getElementById("reporte_divFormulario");
             const lblPorcentaje = document.getElementById("reporte_lblPorcentaje");
+            const lblAprobados = document.getElementById("reporte_lblAprobados");
+            const lblCalificacionMaxima = document.getElementById("reporte_lblCalificacionMaxima");
+            const lblCalificacionMinima = document.getElementById("reporte_lblCalificacionMinima");
             const lblMas25CO5 = document.getElementById("reporte_lblMas25CO5");
+
+            let modeloReporte = new Cl_mConcurso();
+
+            function actualizarResumen(modelo) {
+                const aspirantes = modelo.getAspirantes();
+                const total = aspirantes.length;
+                const aprobados = aspirantes.filter((aspirante) => aspirante.calificacionFinal() >= 10);
+                const max = total === 0 ? 0 : Math.max(...aspirantes.map((aspirante) => aspirante.calificacionFinal()));
+                const min = total === 0 ? 0 : Math.min(...aspirantes.map((aspirante) => aspirante.calificacionFinal()));
+
+                if (lblPorcentaje) {
+                    lblPorcentaje.textContent = `Porcentaje de calificación: ${modelo.porcentajeCalificacion().toFixed(2)} %`;
+                }
+                if (lblAprobados) {
+                    lblAprobados.textContent = `Aprobados: ${total === 0 ? 0 : ((aprobados.length / total) * 100).toFixed(2)} %`;
+                }
+                if (lblCalificacionMaxima) {
+                    lblCalificacionMaxima.textContent = `Calificación más alta: ${max.toFixed(2)}`;
+                }
+                if (lblCalificacionMinima) {
+                    lblCalificacionMinima.textContent = `Calificación más baja: ${min.toFixed(2)}`;
+                }
+                if (lblMas25CO5) {
+                    lblMas25CO5.textContent = `Aspirantes con más de 25 puntos en CO5: ${modelo.mas25CO5()}`;
+                }
+            }
+
+            function mostrarFormularioPorCedula(cedula) {
+                const aspirante = modeloReporte.getAspirantes().find((item) => item.cedula === cedula);
+                if (!reporteDivFormulario) {
+                    return;
+                }
+                if (!aspirante) {
+                    reporteDivFormulario.textContent = `No se encontró aspirante con cédula ${cedula}`;
+                    return;
+                }
+
+                reporteDivFormulario.textContent = `Nombre: ${aspirante.nombre}\n` +
+                    `Cédula: ${aspirante.cedula}\n` +
+                    `Total obtenido: ${aspirante.totalObtenido()}\n` +
+                    `Calificación final: ${aspirante.calificacionFinal().toFixed(2)}\n` +
+                    `CO5: ${aspirante.sumaPtsFormatoCO5()} / 35\n` +
+                    `CO5.1: ${aspirante.sumaPtsFormatoCO51()} / 30\n` +
+                    `CO5.2: ${aspirante.sumaPtsFormatoCO52()} / 15\n` +
+                    `CO5.3: ${aspirante.sumaPtsFormatoCO53()} / 20`;
+            }
 
             async function cargarReporte() {
                 const resultado = await Cl_sEntregas.getEntregas();
@@ -102,13 +171,11 @@
                     alert("Error: No se pudo conectar con el servidor");
                     return;
                 }
-                const modelo = new Cl_mConcurso();
-                modelo.setAspirantes(resultado.tabla);
-                if (lblPorcentaje) {
-                    lblPorcentaje.textContent = `Porcentaje de calificación: ${modelo.porcentajeCalificacion().toFixed(2)} %`;
-                }
-                if (lblMas25CO5) {
-                    lblMas25CO5.textContent = `Aspirantes con más de 25 puntos en CO5: ${modelo.mas25CO5()}`;
+                modeloReporte = new Cl_mConcurso();
+                modeloReporte.setAspirantes(resultado.tabla);
+                actualizarResumen(modeloReporte);
+                if (reporteDivFormulario) {
+                    reporteDivFormulario.textContent = "Ingrese una cédula y presione Buscar para ver el formulario del participante.";
                 }
                 if (reporteSection) {
                     reporteSection.removeAttribute("hidden");
@@ -117,6 +184,19 @@
 
             if (btReporte) {
                 btReporte.onclick = () => cargarReporte();
+            }
+            if (reporteBuscar) {
+                reporteBuscar.onclick = async () => {
+                    const cedula = reporteInputCedula?.value.trim();
+                    if (!cedula) {
+                        alert("Ingrese una cédula para buscar");
+                        return;
+                    }
+                    if (modeloReporte.getAspirantes().length === 0) {
+                        await cargarReporte();
+                    }
+                    mostrarFormularioPorCedula(cedula);
+                };
             }
             if (reporteCerrar) {
                 reporteCerrar.onclick = () => reporteSection?.setAttribute("hidden", "true");

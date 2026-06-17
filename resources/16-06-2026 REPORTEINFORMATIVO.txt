@@ -47,7 +47,8 @@ Estructura:
 - `<button id="concurso_btVerEntregas">`: botón para ver entregas.
 - `<section id="entregas" hidden>`: sección oculta inicial que muestra la tabla de entregas.
 - `<button id="concurso_btReporte">`: nuevo botón dentro de la sección de entregas para abrir el reporte de métricas.
-- `<section id="reporte" hidden>`: nueva sección oculta que muestra un resumen de porcentaje y aspirantes con más de 25 puntos en CO5.
+- `<section id="reporte" hidden>`: nueva sección oculta que muestra un resumen de porcentaje, el porcentaje de aprobados, calificación más alta y más baja, y la posibilidad de buscar por cédula.
+- `<input id="reporte_inpCedula">` y `<button id="reporte_btBuscar">`: permiten buscar el formulario de un participante por cédula.
 - `<table>`: tabla con columnas para aspirante, cédula y puntajes de cada formato.
 - `<tbody id="entregas_tblRegistros"></tbody>`: lugar donde se cargarán las filas dinámicas.
 - Botones `Volver` y `Recargar` para manejar la vista de entregas.
