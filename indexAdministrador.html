@@ -25,7 +25,10 @@
         <section id="entregas" hidden style="margin-top: 10px; border: 1px solid #ccc; padding: 15px; width: auto;">
             
         <!-- Título donde vemos la tabla de Puntuación de cada Aspirante -->
-            <h2 style="text-align: center;">Entregas del Evaluador</h2>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                <h2 style="margin: 0;">Entregas del Evaluador</h2>
+                <button id="concurso_btReporte"><strong> Reporte </strong></button>
+            </div>
 
         <!-- Div donde Colocaremos la tabla -->
             <div>
@@ -47,13 +50,6 @@
                     <tbody id="entregas_tblRegistros"></tbody> <!-- tbody: Cuerpo de tabla -->
                 </table>
 
-                <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
-                    <p id="entregas_lblPorcentaje">Porcentaje de calificación: 0 %</p>
-                </div>
-
-                <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
-                    <p id="entregas_lblMas25CO5">Aspirantes con más de 25 puntos en CO5: 0</p>
-                </div>
 
             </div>
 
@@ -69,15 +65,62 @@
     <!-- Cierre de Sección -->
         </section>
 
+    <!-- Sección de Reporte sin tabla -->
+        <section id="reporte" hidden style="margin-top: 10px; border: 1px solid #ccc; padding: 15px; width: auto;">
+            <h2 style="text-align: center;">Reporte de Entregas</h2>
+            <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
+                <p id="reporte_lblPorcentaje">Porcentaje de calificación: 0 %</p>
+            </div>
+            <div style="text-align: left; width: auto; background-color: #0d95f5; margin: 10px; padding: 5px; border-radius: 5px; color: white">
+                <p id="reporte_lblMas25CO5">Aspirantes con más de 25 puntos en CO5: 0</p>
+            </div>
+            <div style="text-align: center; margin-top: 10px;">
+                <button id="reporte_btCerrar"><strong> Cerrar </strong></button>
+            </div>
+        </section>
+
     <!-- Importamos Los Archivos Js -->
         <script type="module">
 
             import Cl_cConcurso from "./dist/controllers/Cl_cConcurso.js";
             import Cl_vConcurso from "./dist/views/Cl_vConcurso.js";
+            import Cl_mConcurso from "./dist/models/Cl_mConcurso.js";
+            import Cl_sEntregas from "./dist/services/Cl_sEntregas.js";
 
             const vConcurso = new Cl_vConcurso();
-
             new Cl_cConcurso({ vista: vConcurso });
+
+            const btReporte = document.getElementById("concurso_btReporte");
+            const reporteSection = document.getElementById("reporte");
+            const reporteCerrar = document.getElementById("reporte_btCerrar");
+            const lblPorcentaje = document.getElementById("reporte_lblPorcentaje");
+            const lblMas25CO5 = document.getElementById("reporte_lblMas25CO5");
+
+            async function cargarReporte() {
+                const resultado = await Cl_sEntregas.getEntregas();
+                if (resultado.ok === false) {
+                    alert("Error: No se pudo conectar con el servidor");
+                    return;
+                }
+                const modelo = new Cl_mConcurso();
+                modelo.setAspirantes(resultado.tabla);
+                if (lblPorcentaje) {
+                    lblPorcentaje.textContent = `Porcentaje de calificación: ${modelo.porcentajeCalificacion().toFixed(2)} %`;
+                }
+                if (lblMas25CO5) {
+                    lblMas25CO5.textContent = `Aspirantes con más de 25 puntos en CO5: ${modelo.mas25CO5()}`;
+                }
+                if (reporteSection) {
+                    reporteSection.removeAttribute("hidden");
+                }
+            }
+
+            if (btReporte) {
+                btReporte.onclick = () => cargarReporte();
+            }
+            if (reporteCerrar) {
+                reporteCerrar.onclick = () => reporteSection?.setAttribute("hidden", "true");
+            }
 
         </script>
         
