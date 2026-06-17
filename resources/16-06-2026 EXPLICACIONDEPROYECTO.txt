@@ -1,0 +1,111 @@
+16-06-2026 EXPLICACIONDEPROYECTO
+
+Este documento explica el proyecto "L26.p.c3.01.Concurso-Laboral" y su funcionamiento completo.
+
+1) PROPÓSITO DEL PROYECTO
+
+Este proyecto es una aplicación web que gestiona un concurso de aspirantes. Tiene dos interfaces principales:
+- Evaluador: permite ingresar aspirantes, puntuar sus respuestas y guardar los resultados.
+- Administrador: permite ver las entregas guardadas, revisar el listado de aspirantes y consultar métricas de desempeño.
+
+2) ARQUITECTURA GENERAL
+
+La aplicación sigue un patrón similar a MVC (Modelo-Vista-Controlador) con servicios para persistencia.
+- HTML: la estructura de las páginas y los elementos del DOM.
+- Views: clases que interactúan con el DOM y exponen eventos para los controladores.
+- Controllers: clases que manejan el flujo de la aplicación, procesan eventos de usuario y actualizan los modelos y vistas.
+- Models: clases que representan datos y contienen la lógica de negocio, cálculos y transformaciones.
+- Services: clases que gestionan la comunicación con un backend simulado (MockAPI) para guardar y recuperar datos.
+
+3) ESTRUCTURA DE ARCHIVOS
+
+Carpetas y archivos clave:
+- `src/views/Cl_vAspirante.ts`: vista para la interfaz del evaluador.
+- `src/views/Cl_vConcurso.ts`: vista para la página principal del administrador.
+- `src/views/Cl_vEntregas.ts`: vista que muestra el listado de entregas y la tabla de aspirantes.
+- `src/controllers/Cl_cAspirante.ts`: controlador que recibe los datos del evaluador, crea el modelo y guarda el aspirante.
+- `src/controllers/Cl_cConcurso.ts`: controlador que inicia la vista administrativa y controla la apertura de la sección de entregas.
+- `src/controllers/Cl_cEntregas.ts`: controlador que carga los aspirantes desde el backend y actualiza la tabla y las métricas.
+- `src/models/Cl_mAspirante.ts`: modelo que representa un aspirante y calcula sus puntajes y calificación final.
+- `src/models/Cl_mConcurso.ts`: modelo contenedor que calcula métricas globales del concurso.
+- `src/services/Cl_sMockApi.ts`: capa de acceso a MockAPI.
+- `src/services/Cl_sProyecto.ts`: define la URL de la API del proyecto.
+- `src/services/Cl_sAspirante.ts`: servicio de validación y guardado de aspirantes.
+- `src/services/Cl_sEntregas.ts`: servicio para obtener el listado de entregas desde MockAPI.
+- `indexEvaluador.html`: interfaz del evaluador.
+- `indexAdministrador.html`: interfaz del administrador.
+- `tsconfig.json`: configuración de TypeScript.
+
+4) FLUJO DE FUNCIONAMIENTO: EVALUADOR
+
+1. El usuario abre `indexEvaluador.html`.
+2. Ingresa nombre, cédula, notas de examen y 28 valores de las preguntas.
+3. La vista `Cl_vAspirante` lee los inputs y calcula puntajes parciales:
+   - CO5 para preguntas 1-4,
+   - CO5.1 para preguntas 5-11,
+   - CO5.2 para preguntas 12-20,
+   - CO5.3 para preguntas 21-28.
+4. El controlador `Cl_cAspirante` crea una instancia de `Cl_mAspirante` con los datos del aspirante.
+5. Se agregan los puntajes calculados al modelo a través del método `agregarPuntos`.
+6. El servicio `Cl_sAspirante` valida que la cédula no exista ya en MockAPI y guarda el aspirante.
+7. Si el guardado es exitoso, la vista muestra un mensaje de confirmación.
+
+5) FLUJO DE FUNCIONAMIENTO: ADMINISTRADOR
+
+1. El usuario abre `indexAdministrador.html`.
+2. Presiona el botón `Ver Entregas`.
+3. `Cl_cConcurso` crea la vista `Cl_vEntregas` y el controlador `Cl_cEntregas`.
+4. `Cl_cEntregas` solicita a `Cl_sEntregas` la lista de aspirantes guardados en MockAPI.
+5. El modelo `Cl_mConcurso` recibe los registros y los convierte en instancias de `Cl_mAspirante`.
+6. `Cl_vEntregas` muestra la tabla de aspirantes con la información procesada.
+7. El administrador puede recargar la lista para obtener datos actualizados.
+
+6) LÓGICA DE PUNTAJE
+
+`Cl_mAspirante` calcula puntuaciones y calificaciones:
+- `puntajeCO5()` suma respuestas 1-4 hasta máximo 35 puntos.
+- `puntajeCO51()` suma respuestas 5-11 hasta máximo 30 puntos.
+- `puntajeCO52()` suma respuestas 12-20 hasta máximo 15 puntos.
+- `puntajeCO53()` suma respuestas 21-28 hasta máximo 20 puntos.
+- `totalObtenido()` suma los cuatro bloques y las notas de examen.
+- `calificacionFinal()` convierte el puntaje obtenido en una escala de 0 a 20.
+
+7) MÉTRICAS ADMINISTRATIVAS
+
+`Cl_mConcurso` calcula métricas útiles:
+- Porcentaje de calificación global del concurso.
+- Cantidad y porcentaje de aspirantes aprobados (calificación final >= 10).
+- Calificación máxima y mínima entre los aspirantes.
+- Nombres de aspirantes con 25 o más puntos en CO5.
+- Búsqueda de aspirante por cédula.
+
+8) COMUNICACIÓN CON MOCKAPI
+
+Los servicios usan `Cl_sMockApi` para realizar peticiones HTTP:
+- `getTabla()` obtiene todos los registros.
+- `existeId()` verifica si ya existe una cédula.
+- `agregar()` guarda un nuevo aspirante.
+- `modificar()` actualiza un registro existente.
+- `eliminar()` borra un registro.
+
+9) COMPILACIÓN Y EJECUCIÓN
+
+- El proyecto usa TypeScript con `tsconfig.json`.
+- El código fuente está en `src/`.
+- El resultado compilado se genera en `dist/`.
+- Las páginas HTML cargan los módulos desde `dist`.
+- Antes de ejecutar, se debe compilar con `tsc` o `tsc --noEmit` para verificar errores.
+
+10) RESUMEN DEL FUNCIONAMIENTO
+
+La aplicación permite que dos roles interactúen con un mismo backend simulado:
+- El evaluador carga información y puntajes.
+- El administrador obtiene esos datos y revisa métricas resumidas.
+
+El diseño separa responsabilidad:
+- Las vistas se ocupan solo del DOM.
+- Los controladores coordinan acciones.
+- Los modelos calculan y representan datos.
+- Los servicios gestionan el acceso a datos persistentes.
+
+Esto facilita mantener y extender el proyecto sin mezclar lógica de interfaz con lógica de negocio.

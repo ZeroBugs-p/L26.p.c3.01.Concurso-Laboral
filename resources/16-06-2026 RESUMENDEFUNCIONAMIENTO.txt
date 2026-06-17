@@ -1,10 +1,10 @@
 16-06-2026 RESUMENDEFUNCIONAMIENTO
 
-Este archivo resume lo esencial para entender el funcionamiento del proyecto "L26.p.c3.01.Concurso-Laboral".
+Este archivo resume lo esencial para entender el funcionamiento actual del proyecto "L26.p.c3.01.Concurso-Laboral".
 
-1) PROP√ìSITO GENERAL
+1) PROP”SITO GENERAL
 
-El proyecto es una aplicaci√≥n web para un concurso de aspirantes. Permite:
+El proyecto es una aplicaciÛn web para un concurso de aspirantes. Permite:
 - Al evaluador: ingresar datos de aspirantes, puntuar 28 preguntas y guardar resultados en MockAPI.
 - Al administrador: consultar las entregas guardadas y verlas en una tabla.
 
@@ -14,7 +14,7 @@ Capas principales:
 - HTML: define la interfaz de evaluador y administrador.
 - Views: leen/escriben el DOM y exponen eventos.
 - Controllers: coordinan eventos, modelos y servicios.
-- Models: contienen la l√≥gica de negocio y c√°lculos.
+- Models: contienen la lÛgica de negocio y c·lculos.
 - Services: comunican con MockAPI.
 
 3) ARCHIVOS CLAVE
@@ -25,126 +25,98 @@ Capas principales:
 - `src/views/Cl_vConcurso.ts`: vista del administrador.
 - `src/views/Cl_vEntregas.ts`: vista de la tabla de entregas.
 - `src/controllers/Cl_cAspirante.ts`: controlador de ingreso y guardado de aspirantes.
-- `src/controllers/Cl_cConcurso.ts`: controlador de navegaci√≥n hacia entregas.
+- `src/controllers/Cl_cConcurso.ts`: controlador de navegaciÛn hacia entregas.
 - `src/controllers/Cl_cEntregas.ts`: controlador de carga y renderizado de entregas.
-- `src/models/Cl_mAspirante.ts`: modelo de aspirante con c√°lculos de puntaje.
+- `src/models/Cl_mAspirante.ts`: modelo de aspirante con c·lculos de puntaje.
 - `src/models/Cl_mConcurso.ts`: modelo contenedor de aspirantes.
-- `src/services/Cl_sMockApi.ts`: capa base de comunicaci√≥n HTTP con MockAPI.
+- `src/services/Cl_sMockApi.ts`: capa base de comunicaciÛn HTTP con MockAPI.
 - `src/services/Cl_sProyecto.ts`: define la URL del proyecto MockAPI.
 - `src/services/Cl_sAspirante.ts`: servicio para validar y agregar aspirantes.
 - `src/services/Cl_sEntregas.ts`: servicio para obtener entregas.
-- `src/models/Cl_mConcurso.ts`: ahora tambi√©n contiene m√©todos para buscar aspirantes por c√©dula, calcular el porcentaje de aprobados y obtener las calificaciones m√°xima y m√≠nima.
-- `indexAdministrador.html`: ahora tambi√©n incluye un bot√≥n `Reporte` dentro de la secci√≥n de entregas y una secci√≥n `reporte` oculta con m√©tricas de resumen.
-- La secci√≥n de reporte permite buscar por c√©dula para obtener el formulario del participante.
-- El reporte muestra el porcentaje de aspirantes aprobados, la calificaci√≥n m√°s alta y la calificaci√≥n m√°s baja del proceso.
 
 4) FUNCIONAMIENTO ESENCIAL
 
 Flujo del evaluador:
-- El usuario ingresa nombre, c√©dula, tres notas y 28 puntajes de preguntas.
-- `Cl_cAspirante.btEnviarOnClick()` crea instancia `Cl_mAspirante` con los datos b√°sicos.
-- Se leen los puntajes agrupados en cuatro m√©todos de la vista:
+- El usuario ingresa nombre, cÈdula, tres notas y 28 puntajes de preguntas.
+- `Cl_cAspirante.btEnviarOnClick()` crea instancia `Cl_mAspirante` con los datos b·sicos.
+- Se leen los puntajes agrupados en cuatro mÈtodos de la vista:
   - `puntajeCO5()`: preguntas 1-4.
   - `puntajeCO51()`: preguntas 5-11.
   - `puntajeCO52()`: preguntas 12-20.
   - `puntajeCO53()`: preguntas 21-28.
 - Cada puntaje se agrega al modelo mediante `aspirante.agregarPuntos(seccion, puntos)`.
 - Se llama `sAspirante.agregar(aspirante)` para validar y guardar en MockAPI.
-- Si la operaci√≥n es exitosa, muestra confirmaci√≥n en la vista.
+- Si la operaciÛn es exitosa, muestra confirmaciÛn en la vista.
 
 Flujo del administrador:
-- `Cl_cConcurso` escucha el bot√≥n "Ver Entregas".
+- `Cl_cConcurso` escucha el botÛn "Ver Entregas".
 - Al hacer clic se crea `Cl_vEntregas`, `Cl_mConcurso` y `Cl_cEntregas`.
 - `Cl_cEntregas.btRecargarOnClick()` obtiene datos con `Cl_sEntregas.getEntregas()`.
 - `modelo.setAspirantes(resultado.tabla)` transforma cada registro en `Cl_mAspirante`.
 - La vista muestra filas con los datos procesados.
-- El bot√≥n `Reporte` dentro de la secci√≥n de entregas abre una vista resumida sin mostrar la tabla, con porcentaje de calificaci√≥n y aspirantes con m√°s de 25 puntos en CO5.
+- El botÛn `Reporte` dentro de la secciÛn de entregas abre una vista resumida con mÈtricas.
 
-5) ESPECIFICACIONES DE M√âTODOS PRINCIPALES
+5) M…TODOS PRINCIPALES
 
 `Cl_vAspirante`:
-- `get nombre()`: devuelve el valor del input nombre.
-- `get cedula()`: devuelve el valor del input c√©dula.
-- `get notaExamenEscrito()`: devuelve la nota del examen escrito.
-- `get notaExamenPractico()`: devuelve la nota del examen pr√°ctico.
-- `get notaExamenAptitudes()`: devuelve la nota del examen de aptitudes.
-- `puntajeCO5()`: lee preguntas 1-4, valida no negativos y retorna valores positivos.
-- `puntajeCO51()`: lee preguntas 5-11, valida no negativos.
-- `puntajeCO52()`: lee preguntas 12-20, valida no negativos.
-- `puntajeCO53()`: lee preguntas 21-28, valida no negativos.
-- `onEnviar(callback)`: asigna callback al evento clic del bot√≥n Enviar.
-- `onCancelar(callback)`: asigna callback al bot√≥n Cancelar.
-- `mostrar()`: muestra la secci√≥n del formulario y limpia los campos.
-- `ocultar()`: oculta la secci√≥n.
-- `mostrarConfirmacion()`: reemplaza la vista con un mensaje de registro exitoso.
-- `aplicarValidaciones()`: agrega validaci√≥n de min/max a los inputs de preguntas.
+- `get nombre()`, `get cedula()`, `get notaExamenEscrito()`, `get notaExamenPractico()`, `get notaExamenAptitudes()`.
+- `puntajeCO5()`, `puntajeCO51()`, `puntajeCO52()`, `puntajeCO53()`.
+- `onEnviar(callback)` y `onCancelar(callback)`.
+- `mostrar()` y `ocultar()`.
+- `mostrarConfirmacion()`.
 
 `Cl_vConcurso`:
-- `onVerEntregas(callback)`: asigna callback al bot√≥n Ver Entregas.
-- `deshabilitarBotones()`: desactiva el bot√≥n.
-- `habilitarBotones()`: activa el bot√≥n.
+- `onVerEntregas(callback)`.
+- `deshabilitarBotones()`, `habilitarBotones()`.
 
 `Cl_vEntregas`:
-- `mostrarAspirantes(aspirantes)`: genera filas HTML con datos de cada aspirante.
-- `onRecargar(callback)`: asigna callback al bot√≥n Recargar.
-- `onVolver(callback)`: asigna callback al bot√≥n Volver.
-- `mostrar()`: muestra la secci√≥n de entregas.
-- `ocultar()`: oculta la secci√≥n.
+- `mostrarAspirantes(aspirantes)`.
+- `onRecargar(callback)`, `onVolver(callback)`.
+- `mostrar()` y `ocultar()`.
 
 `Cl_cAspirante`:
-- `btEnviarOnClick()`: m√©todo principal que crea el modelo, agrega puntajes y llama al servicio para guardar.
+- lee datos de la vista y crea `Cl_mAspirante`.
+- agrega puntajes al modelo.
+- guarda el aspirante en MockAPI.
 
 `Cl_cConcurso`:
-- `onVerEntregas()`: crea la vista y controlador de entregas y deshabilita el bot√≥n principal.
+- crea la vista de entregas y el controlador de entregas.
+- gestiona navigation entre vistas.
 
 `Cl_cEntregas`:
-- `onVolver()`: oculta la vista de entregas y ejecuta callback para regresar.
-- `btRecargarOnClick()`: obtiene entregas desde el servicio, carga el modelo y actualiza la vista.
+- carga la lista de entregas.
+- actualiza la vista con los datos obtenidos.
 
 `Cl_mAspirante`:
-- `agregarPuntos(seccion, puntos)`: a√±ade el puntaje al array de la secci√≥n correcta.
-- `sumaPtsFormatoCO5()`: suma puntos de CO5 y aplica tope 35.
-- `sumaPtsFormatoCO51()`: suma puntos de CO5.1 y aplica tope 30.
-- `sumaPtsFormatoCO52()`: suma puntos de CO5.2 y limita a 15.
-- `sumaPtsFormatoCO53()`: suma puntos de CO5.3 y limita a 20.
-- `totalObtenido()`: suma las cuatro secciones.
-- `calificacionFinal()`: divide el total obtenido entre 5 para escala de 20.
-- `cargarSumasGuardadas(sumas)`: restaura totales desde un objeto de datos externos.
-- `calificacion10Porciento()`: calcula 10% de `totalObtenido()`.
-- `calificacionCO8()`: calcula el promedio de notas escrito y pr√°ctico.
-- `calificacion60PorcientoCO8()`: aplica 60% al promedio CO8.
-- `calificacion30PorcientoAptitudes()`: aplica 30% a la nota de aptitudes.
-- `notaDefinitiva()`: suma CO7 + CO8 + CO9.
-- `toJSON()`: prepara los datos para enviar a la API, incluyendo totales y calificaci√≥n final.
+- calcula sumas de CO5, CO5.1, CO5.2 y CO5.3.
+- calcula `totalObtenido()` y `calificacionFinal()`.
+- limita los puntajes a sus m·ximos.
 
 `Cl_mConcurso`:
-- `agregarAspirante(aspirante)`: inserta un objeto en `aspirantes`.
-- `setAspirantes(aspirante)`: convierte un array de objetos obtenidos en instancias `Cl_mAspirante`.
-- `getAspirantes()`: devuelve el array.
+- calcula porcentaje global.
+- obtiene aspirantes con CO5 alto.
+- busca por cÈdula.
+- calcula porcentaje de aprobados.
+- obtiene calificaciones m·xima y mÌnima.
 
 `Cl_sMockApi`:
-- `fetchMockApi({...})`: realiza solicitudes fetch y maneja respuestas HTTP.
-- `getTabla({ tabla })`: obtiene la lista completa de registros.
-- `existeId({ tabla, tablaId, tablaIdName })`: verifica existencia de un registro por campo.
-- `agregar(registro)`: crea un registro nuevo con POST.
-- `obtenerIdMockApi({...})`: busca el `id` interno de MockAPI.
-- `modificar(tablaId, registro, tablaIdName)`: actualiza un registro existente.
-- `eliminar(tablaId, tabla, tablaIdName)`: elimina un registro.
+- maneja las peticiones HTTP hacia MockAPI.
+- gestiona get, post, put y delete.
 
 `Cl_sProyecto`:
-- define `apiUrl` del proyecto MockAPI.
+- define la URL base de MockAPI.
 
 `Cl_sAspirante`:
-- `existe(aspiranteId)`: revisa si ya hay un aspirante con la c√©dula dada.
-- `agregar(nuevoAspirante)`: valida campos, unicidad y guarda el aspirante.
+- valida y agrega aspirantes.
 
 `Cl_sEntregas`:
-- `getEntregas()`: devuelve todos los registros de aspirantes.
+- obtiene las entregas guardadas.
 
-6) PUNTOS IMPORTANTES
+---
 
-- El sistema guarda en la API solo las sumas de cada bloque, no cada pregunta individual.
-- La calificaci√≥n final mostrada en la tabla es `totalObtenido() / 5`.
-- Se usan getters en la vista para leer valores de los inputs al vuelo.
-- Los servicios usan `MockAPI` con URL fija en `Cl_sProyecto`.
-- El archivo `resources/08-06-2026 RESUMENDEFUNCIONAMIENTO.txt` acompa√±a el informe instructivo ya creado.
+6) CAMBIOS RECIENTES
+
+- Se aÒadiÛ la secciÛn de reporte en `indexAdministrador.html` con b˙squeda por cÈdula.
+- Se aÒadiÛ un resumen de mÈtricas en la vista de reporte.
+- El modelo de concurso incluye funciones de resumen de resultados.
+- El proyecto compila correctamente con `tsc --noEmit`.
